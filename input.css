@@ -1,1 +1,12 @@
 @import "tailwindcss";
+
+
+body{
+     background: linear-gradient(to right, aquamarine, turquoise, navy) 
+}
+
+
+.location-icon{
+    color:chartreuse;
+    font-size: 20px;
+}
