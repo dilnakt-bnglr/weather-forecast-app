@@ -2,11 +2,16 @@
 
 
 body{
-     background: linear-gradient(to right, aquamarine, turquoise, navy) 
+     background: linear-gradient(to right, aquamarine, turquoise, navy) ;
+     padding:1rem
 }
 
 
 .location-icon{
     color:chartreuse;
     font-size: 20px;
+}
+
+.current-day{
+  box-shadow: inset 0px 0px 20px 20px rgb(13 6 114 / 25%);
 }

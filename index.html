@@ -12,13 +12,13 @@
   </head>
   <body>
     <!-- Header Section -->
-    <section class="header grid grid-cols-[1fr_2fr_1fr] text-blue-900 m-5">
+    <section class="header grid grid-cols-[1fr_2fr_1fr] text-blue-900 mb-20">
       <div class="logo flex cursor-pointer">
         <p class="mt-2 mr-2"><i class="fa-solid fa-cloud text-3xl"></i></p>
         <h2 class="logo font-bold text-3xl hidden lg:block">WeatherNow</h2>
       </div>
 
-      <div class="flex">
+      <div class="flex justify-center items-center">
         <input
           class="p-2 pl-4 outline-none border-2 border-white rounded-full w-[75%]"
           type="text"
@@ -37,6 +37,30 @@
           Use Current location
         </button>
         <i class="fa-solid fa-location-pin location-icon"></i>
+      </div>
+    </section>
+
+    <!-- Weather Section -->
+    <section class="">
+      <div class="current-day lg:w-[45%] m-auto rounded-2xl p-5 text-white">
+        <div class="text-center p-5">
+          <h3 class="text-2xl font-semibold">TODAY</h3>
+        </div>
+        <div class="weather-values flex justify-evenly items-center">
+          <h2 class="current-temperature text-5xl font-bold">15°C</h2>
+          <img
+            class="weather-icon"
+            src="./assets/sunny.png"
+            alt="logo"
+            width="20%"
+          />
+          <p class="location text-2xl font-bold">Location</p>
+        </div>
+        <div class="weather-details text-center text-xl font-semibold p-5">
+          <p class="">Temperature</p>
+          <p>Humidity</p>
+          <p>Wind Speed</p>
+        </div>
       </div>
     </section>
   </body>
