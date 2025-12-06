@@ -18,7 +18,7 @@
         <h2 class="logo font-bold text-3xl hidden lg:block">WeatherNow</h2>
       </div>
 
-      <div class="flex justify-center items-center">
+      <div class="flex justify-center items-center text-center hidden sm:block">
         <input
           class="p-2 pl-4 outline-none border-2 border-white rounded-full w-[75%]"
           type="text"
@@ -32,11 +32,28 @@
           Search
         </button>
       </div>
-      <div class="text-end mt-2 cursor-pointer">
-        <button class="text-white cursor-pointer hidden lg:contents">
-          Use Current location
+      <div class="text-end mt-2 cursor-pointer absolute right-5">
+        <button class="text-white cursor-pointer sm:hidden lg:contents">
+          Current location
         </button>
         <i class="fa-solid fa-location-pin location-icon"></i>
+      </div>
+    </section>
+    <!-- Mobile Search Section -->
+    <section class="sm:hidden mb-10">
+      <div class="flex justify-center items-center">
+        <input
+          class="p-2 pl-4 outline-none border-2 border-white rounded-full w-[75%]"
+          type="text"
+          placeholder="Enter city name"
+          id="cityInput"
+        />
+        <button
+          class="border-1 border-blue-900 text-white p-2 rounded-full ml-2 bg-blue-900 cursor-pointer"
+          id="getWeatherBtn"
+        >
+          Search
+        </button>
       </div>
     </section>
 
