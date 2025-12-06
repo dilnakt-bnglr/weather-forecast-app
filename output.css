@@ -183,6 +183,12 @@
   }
 }
 @layer utilities {
+  .absolute {
+    position: absolute;
+  }
+  .right-5 {
+    right: calc(var(--spacing) * 5);
+  }
   .m-auto {
     margin: auto;
   }
@@ -201,9 +207,6 @@
   .mb-10 {
     margin-bottom: calc(var(--spacing) * 10);
   }
-  .mb-20 {
-    margin-bottom: calc(var(--spacing) * 20);
-  }
   .ml-2 {
     margin-left: calc(var(--spacing) * 2);
   }
@@ -219,15 +222,6 @@
   .table {
     display: table;
   }
-  .w-\[20\%\] {
-    width: 20%;
-  }
-  .w-\[40\%\] {
-    width: 40%;
-  }
-  .w-\[50\%\] {
-    width: 50%;
-  }
   .w-\[75\%\] {
     width: 75%;
   }
@@ -242,9 +236,6 @@
   }
   .grid-cols-2 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  .grid-cols-\[1fr_1fr\] {
-    grid-template-columns: 1fr 1fr;
   }
   .grid-cols-\[1fr_2fr_1fr\] {
     grid-template-columns: 1fr 2fr 1fr;
@@ -327,10 +318,6 @@
     font-size: var(--text-xl);
     line-height: var(--tw-leading, var(--text-xl--line-height));
   }
-  .text-xs {
-    font-size: var(--text-xs);
-    line-height: var(--tw-leading, var(--text-xs--line-height));
-  }
   .font-bold {
     --tw-font-weight: var(--font-weight-bold);
     font-weight: var(--font-weight-bold);
@@ -344,12 +331,6 @@
   }
   .text-blue-900 {
     color: var(--color-blue-900);
-  }
-  .text-sky-600 {
-    color: var(--color-sky-600);
-  }
-  .text-sky-900 {
-    color: var(--color-sky-900);
   }
   .text-white {
     color: var(--color-white);
@@ -365,6 +346,21 @@
     --tw-outline-style: none;
     outline-style: none;
   }
+  .sm\:block {
+    @media (width >= 40rem) {
+      display: block;
+    }
+  }
+  .sm\:contents {
+    @media (width >= 40rem) {
+      display: contents;
+    }
+  }
+  .sm\:hidden {
+    @media (width >= 40rem) {
+      display: none;
+    }
+  }
   .lg\:block {
     @media (width >= 64rem) {
       display: block;
@@ -373,11 +369,6 @@
   .lg\:contents {
     @media (width >= 64rem) {
       display: contents;
-    }
-  }
-  .lg\:w-\[20\%\] {
-    @media (width >= 64rem) {
-      width: 20%;
     }
   }
   .lg\:w-\[45\%\] {
