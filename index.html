@@ -5,8 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Weather Forecast Application</title>
     <link rel="stylesheet" href="output.css" />
+    <script
+      src="https://kit.fontawesome.com/3477ae541c.js"
+      crossorigin="anonymous"
+    ></script>
   </head>
   <body>
-    <h1>Weather Forecast Application</h1>
+    <section class="header grid grid-cols-[1fr_2fr_1fr] text-blue-900 m-5">
+      <div class="logo flex">
+        <p class="mt-2 mr-2"><i class="fa-solid fa-cloud text-3xl"></i></p>
+        <h2 class="logo font-bold text-3xl">WeatherNow</h2>
+      </div>
+
+      <div class="flex m-auto">
+        <input
+          class="p-2 pl-4 outline-none border-2 border-white rounded-full w-[300px]"
+          type="text"
+          placeholder="Enter city name"
+          id="cityInput"
+        />
+        <button
+          class="border-1 border-blue-900 text-white p-2 rounded-full ml-2 w-20 bg-blue-900"
+          id="getWeatherBtn"
+        >
+          Search
+        </button>
+      </div>
+      <div class="text-end mt-2">
+        <button class="text-white">Use Current location</button>
+        <i class="fa-solid fa-location-pin location-icon"></i>
+      </div>
+    </section>
   </body>
 </html>
