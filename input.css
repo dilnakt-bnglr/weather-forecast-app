@@ -15,3 +15,8 @@ body{
 .current-day{
   box-shadow: inset 0px 0px 20px 20px rgb(13 6 114 / 25%);
 }
+
+.forecast-card{
+  border-color: ghostwhite;
+  box-shadow: inset 0px 0px 20px 20px rgb(13 6 114 / 25%);
+}
