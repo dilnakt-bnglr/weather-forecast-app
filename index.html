@@ -9,6 +9,7 @@
       src="https://kit.fontawesome.com/3477ae541c.js"
       crossorigin="anonymous"
     ></script>
+    <script src="index.js" defer></script>
   </head>
   <body>
     <!-- Header Section -->
@@ -18,15 +19,17 @@
         <h2 class="logo font-bold text-3xl hidden lg:block">WeatherNow</h2>
       </div>
 
-      <div class="flex justify-center items-center text-center hidden sm:block">
+      <div
+        class="search flex justify-center items-center text-center hidden sm:block"
+      >
         <input
-          class="p-2 pl-4 outline-none border-2 border-white rounded-full w-[75%]"
+          class="location-input p-2 pl-4 outline-none border-2 border-white rounded-full w-[75%]"
           type="text"
           placeholder="Enter city name"
           id="cityInput"
         />
         <button
-          class="border-1 border-blue-900 text-white p-2 rounded-full ml-2 bg-blue-900 cursor-pointer"
+          class="search-button border-1 border-blue-900 text-white p-2 rounded-full ml-2 bg-blue-900 cursor-pointer"
           id="getWeatherBtn"
         >
           Search
