@@ -9,7 +9,46 @@ api_key = "d8648784e60e8791c06e2b96d64cc3b2";
 // Fetch weather details on page load
 document.addEventListener("DOMContentLoaded",()=>{
   getCurrentLocationWeather();
-})
+  customDropdown();
+  getDropDownOptions();
+});
+
+function getDropDownOptions() {
+  let cityOptions=JSON.parse(localStorage.getItem('cityList'));
+  console.log(cityOptions);
+  const customOptions = document.querySelector(".custom-options");
+  cityOptions.forEach((city)=>{
+    const option=document.createElement("p");
+    option.classList.add("custom-option");
+    option.textContent=city;
+    option.addEventListener("mousedown",getCityOption);
+    customOptions.appendChild(option);
+  });
+}
+
+function customDropdown() {
+  const cityInput = document.querySelector(".location-input");
+  const customOptions = document.querySelector(".custom-options");
+  if (cityInput && customOptions) {
+    cityInput.focus();
+    cityInput.addEventListener("focus", () => {
+      customOptions.style.display = "block";
+    });
+    cityInput.addEventListener("blur", () => {
+      setTimeout(() => {
+        customOptions.style.display = "none";
+      }, 150); 
+    });
+  }
+}
+
+// Get city option from dropdown
+function getCityOption(e){
+  const cityInput= document.querySelector(".location-input");
+  cityInput.value=e.target.textContent;
+  const city=cityInput.value;
+  getWeatherByCityName(city);
+}
 
 // Validate city name input
 function validateCityName(cityName) {
