@@ -2,7 +2,14 @@ let searchBtn = document.querySelector(".search-button");
 let searchBtnMobile = document.querySelector(".search-button-mobile");
 searchBtnMobile.addEventListener("click", handleMobileSearch);
 searchBtn.addEventListener("click", handleSearch);
+const currentLocation=document.querySelector(".current-location-container");
+currentLocation.addEventListener("click",getCurrentLocationWeather);
 api_key = "d8648784e60e8791c06e2b96d64cc3b2";
+
+// Fetch weather details on page load
+document.addEventListener("DOMContentLoaded",()=>{
+  getCurrentLocationWeather();
+})
 
 // Validate city name input
 function validateCityName(cityName) {
@@ -64,7 +71,6 @@ function getWeatherByCityName(city) {
       updateWeatherDetailsUI(data);
     })
     .catch((error) => {
-      debugger;
       console.log("Error fetching coordinates:", error);
     });
 
@@ -90,6 +96,7 @@ function updateWeatherDetailsUI(weatherData) {
   // Update location
   const location = document.querySelector(".location");
   location.textContent = `${weatherData.name},${weatherData.sys.country}`;
+  weatherDetails.innerHTML="";
   //  Update humidity
   const humidity = document.createElement("p");
   humidity.classList.add("current-humidity");
@@ -112,7 +119,7 @@ function getFormattedDate(dateData) {
   return `${day}, ${month} ${date}`;
 }
 
-
+// Update forecast UI
 function updateForecastUI(forecastData){
     const dayForecast={};
     forecastData.list.forEach(forecast=>{
@@ -122,20 +129,23 @@ function updateForecastUI(forecastData){
             }
             dayForecast[date].push(forecast);
     });
-    
-    const forecastDays=Object.keys(dayForecast);
+    const forecastDays=Object.keys(dayForecast).slice(1,6);
 
+    // Update forecast cards UI
+    const forecastContainer=document.getElementsByClassName("forecast-card-container")[0];
+    forecastContainer.innerHTML="";
     forecastDays.forEach((day)=>{
         const dayData=dayForecast[day];
+        const date=getFormattedDate(dayData[0].dt);
         const dayTemperature=dayData[0].main.temp;
         const dayIcon=dayData[0].weather[0].icon;
         const dayHumidity=dayData[0].main.humidity;
         const dayWindSpeed=dayData[0].wind.speed;
-        const forecastContainer=document.getElementsByClassName("forecast-card-container")[0];
+        // Create forecast card
         const forecastCard=document.createElement("div");
         forecastCard.classList.add("forecast-card","border-2","rounded-2xl","p-2");
         forecastCard.innerHTML=`
-          <h2 class="text-center text-black font-semibold">12-11-2025</h2>
+          <h2 class="text-center text-black font-semibold">${date}</h2>
           <p class="text-4xl font-semibold text-center text-white my-2">${Math.round(dayTemperature)}°C</p>
           <p class="text-black font-bold text-sm">Humidity : ${dayHumidity}%</p>
           <p class="text-black font-bold text-sm">Wind Speed : ${dayWindSpeed} m/s</p>
@@ -148,5 +158,38 @@ function updateForecastUI(forecastData){
             />
           </div>`;
         forecastContainer.appendChild(forecastCard);
-    })
+    });
 }
+
+// Get current location weather
+function getCurrentLocationWeather(){
+  if(navigator.geolocation){
+    navigator.geolocation.getCurrentPosition((position)=>{
+      const lat=position.coords.latitude;
+      const lon=position.coords.longitude;
+     getCurrentWeatherByCoordinates(lat,lon);
+    });
+  }
+  else{
+    alert("Geolocation is not supported by this browser.");
+  }
+}
+
+// Fetch weather by coordinates
+function getCurrentWeatherByCoordinates(lat,lon){
+  const weatherAPI=`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${api_key}&units=metric`;
+  fetch(weatherAPI).then((response)=>response.json()).then((data)=>{
+    updateWeatherDetailsUI(data);
+
+  }).catch((error)=>{
+    console.log("Error fetching current location weather:",error);
+  });
+
+  const forecastAPI=`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${api_key}&units=metric`;
+  fetch(forecastAPI).then((response)=>response.json()).then((data)=>{
+    updateForecastUI(data);
+  }).catch((error)=>{
+    console.log("Error fetching current location forecast:",error);
+  })
+}
+
