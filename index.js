@@ -2,30 +2,43 @@ let searchBtn = document.querySelector(".search-button");
 let searchBtnMobile = document.querySelector(".search-button-mobile");
 searchBtnMobile.addEventListener("click", handleMobileSearch);
 searchBtn.addEventListener("click", handleSearch);
-const currentLocation=document.querySelector(".current-location-container");
-currentLocation.addEventListener("click",getCurrentLocationWeather);
+const currentLocation = document.querySelector(".current-location-container");
+currentLocation.addEventListener("click", getCurrentLocationWeather);
 api_key = "d8648784e60e8791c06e2b96d64cc3b2";
 
 // Fetch weather details on page load
-document.addEventListener("DOMContentLoaded",()=>{
+document.addEventListener("DOMContentLoaded", () => {
   getCurrentLocationWeather();
   customDropdown();
-  getDropDownOptions();
+  getDropDownOptionsFromLocalStorage();
 });
 
-function getDropDownOptions() {
-  let cityOptions=JSON.parse(localStorage.getItem('cityList'));
-  console.log(cityOptions);
+// Adding city to local storage
+function addCityToLocalStorage(city,country) {
+ let cityList = JSON.parse(localStorage.getItem("cityList")) || [];
+  city = `${city}, ${country}`;  
+ if(!cityList.includes(city)){
+  cityList.unshift(city);
+ }
+  cityList = cityList.slice(0, 5);
+  localStorage.setItem("cityList", JSON.stringify(cityList));
+}
+
+// Get dropdown options from local storage
+function getDropDownOptionsFromLocalStorage() {
+  let cityOptions = JSON.parse(localStorage.getItem("cityList"));
   const customOptions = document.querySelector(".custom-options");
-  cityOptions.forEach((city)=>{
-    const option=document.createElement("p");
+  customOptions.innerHTML = "";
+  cityOptions.forEach((city) => {
+    const option = document.createElement("p");
     option.classList.add("custom-option");
-    option.textContent=city;
-    option.addEventListener("mousedown",getCityOption);
+    option.textContent = city;
+    option.addEventListener("mousedown", getCityOption);
     customOptions.appendChild(option);
   });
 }
 
+// Get dropdown options
 function customDropdown() {
   const cityInput = document.querySelector(".location-input");
   const customOptions = document.querySelector(".custom-options");
@@ -37,16 +50,16 @@ function customDropdown() {
     cityInput.addEventListener("blur", () => {
       setTimeout(() => {
         customOptions.style.display = "none";
-      }, 150); 
+      }, 150);
     });
   }
 }
 
 // Get city option from dropdown
-function getCityOption(e){
-  const cityInput= document.querySelector(".location-input");
-  cityInput.value=e.target.textContent;
-  const city=cityInput.value;
+function getCityOption(e) {
+  const cityInput = document.querySelector(".location-input");
+  cityInput.value = e.target.textContent;
+  const city = cityInput.value;
   getWeatherByCityName(city);
 }
 
@@ -75,8 +88,7 @@ function handleSearch() {
   if (isValid) {
     getWeatherByCityName(cityName);
     cityInput.value = "";
-  } 
- 
+  }
 }
 
 // Handle mobile search button click
@@ -107,21 +119,26 @@ function getWeatherByCityName(city) {
         }
         return;
       }
+      addCityToLocalStorage(city,data.sys.country);
+      getDropDownOptions();
       updateWeatherDetailsUI(data);
     })
     .catch((error) => {
       console.log("Error fetching coordinates:", error);
     });
 
-    const forecastAPI=`https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${api_key}&units=metric`;
-    fetch(forecastAPI).then((response)=>response.json()).then((data)=>{
-        updateForecastUI(data);
-    })
+  const forecastAPI = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${api_key}&units=metric`;
+  fetch(forecastAPI)
+    .then((response) => response.json())
+    .then((data) => {
+      updateForecastUI(data);
+    });
 }
 
+// Update weather details UI
 function updateWeatherDetailsUI(weatherData) {
-    const weatherDetails = document.querySelector(".weather-details");
-    const currentWeatherIconElement = document.querySelector(".weather-icon");
+  const weatherDetails = document.querySelector(".weather-details");
+  const currentWeatherIconElement = document.querySelector(".weather-icon");
   //  Update date
   const currentDay = document.querySelector(".current-date");
   currentDay.textContent = getFormattedDate(weatherData.dt);
@@ -130,18 +147,18 @@ function updateWeatherDetailsUI(weatherData) {
   temperature.textContent = `${Math.round(weatherData.main.temp)} °C`;
 
   // Update weather icon
-    const weatherIcon=weatherData.weather[0].icon;
-    currentWeatherIconElement.src=`https://openweathermap.org/img/wn/${weatherIcon}.png`;
+  const weatherIcon = weatherData.weather[0].icon;
+  currentWeatherIconElement.src = `https://openweathermap.org/img/wn/${weatherIcon}.png`;
   // Update location
   const location = document.querySelector(".location");
   location.textContent = `${weatherData.name},${weatherData.sys.country}`;
-  weatherDetails.innerHTML="";
+  weatherDetails.innerHTML = "";
   //  Update humidity
   const humidity = document.createElement("p");
   humidity.classList.add("current-humidity");
   humidity.textContent = `Humidity: ${weatherData.main.humidity} %`;
   weatherDetails.appendChild(humidity);
-  
+
   // Update wind speed
   const windSpeed = document.createElement("p");
   windSpeed.classList.add("wind-speed");
@@ -159,33 +176,42 @@ function getFormattedDate(dateData) {
 }
 
 // Update forecast UI
-function updateForecastUI(forecastData){
-    const dayForecast={};
-    forecastData.list.forEach(forecast=>{
-        const date=new Date(forecast.dt*1000).toLocaleDateString();
-            if(!dayForecast[date]){
-                dayForecast[date]=[];
-            }
-            dayForecast[date].push(forecast);
-    });
-    const forecastDays=Object.keys(dayForecast).slice(1,6);
+function updateForecastUI(forecastData) {
+  const dayForecast = {};
+  forecastData.list.forEach((forecast) => {
+    const date = new Date(forecast.dt * 1000).toLocaleDateString();
+    if (!dayForecast[date]) {
+      dayForecast[date] = [];
+    }
+    dayForecast[date].push(forecast);
+  });
+  const forecastDays = Object.keys(dayForecast).slice(1, 6);
 
-    // Update forecast cards UI
-    const forecastContainer=document.getElementsByClassName("forecast-card-container")[0];
-    forecastContainer.innerHTML="";
-    forecastDays.forEach((day)=>{
-        const dayData=dayForecast[day];
-        const date=getFormattedDate(dayData[0].dt);
-        const dayTemperature=dayData[0].main.temp;
-        const dayIcon=dayData[0].weather[0].icon;
-        const dayHumidity=dayData[0].main.humidity;
-        const dayWindSpeed=dayData[0].wind.speed;
-        // Create forecast card
-        const forecastCard=document.createElement("div");
-        forecastCard.classList.add("forecast-card","border-2","rounded-2xl","p-2");
-        forecastCard.innerHTML=`
+  // Update forecast cards UI
+  const forecastContainer = document.getElementsByClassName(
+    "forecast-card-container"
+  )[0];
+  forecastContainer.innerHTML = "";
+  forecastDays.forEach((day) => {
+    const dayData = dayForecast[day];
+    const date = getFormattedDate(dayData[0].dt);
+    const dayTemperature = dayData[0].main.temp;
+    const dayIcon = dayData[0].weather[0].icon;
+    const dayHumidity = dayData[0].main.humidity;
+    const dayWindSpeed = dayData[0].wind.speed;
+    // Create forecast card
+    const forecastCard = document.createElement("div");
+    forecastCard.classList.add(
+      "forecast-card",
+      "border-2",
+      "rounded-2xl",
+      "p-2"
+    );
+    forecastCard.innerHTML = `
           <h2 class="text-center text-black font-semibold">${date}</h2>
-          <p class="text-4xl font-semibold text-center text-white my-2">${Math.round(dayTemperature)}°C</p>
+          <p class="text-4xl font-semibold text-center text-white my-2">${Math.round(
+            dayTemperature
+          )}°C</p>
           <p class="text-black font-bold text-sm">Humidity : ${dayHumidity}%</p>
           <p class="text-black font-bold text-sm">Wind Speed : ${dayWindSpeed} m/s</p>
           <div>
@@ -196,39 +222,42 @@ function updateForecastUI(forecastData){
               width="45%"
             />
           </div>`;
-        forecastContainer.appendChild(forecastCard);
-    });
+    forecastContainer.appendChild(forecastCard);
+  });
 }
 
 // Get current location weather
-function getCurrentLocationWeather(){
-  if(navigator.geolocation){
-    navigator.geolocation.getCurrentPosition((position)=>{
-      const lat=position.coords.latitude;
-      const lon=position.coords.longitude;
-     getCurrentWeatherByCoordinates(lat,lon);
+function getCurrentLocationWeather() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition((position) => {
+      const lat = position.coords.latitude;
+      const lon = position.coords.longitude;
+      getCurrentWeatherByCoordinates(lat, lon);
     });
-  }
-  else{
+  } else {
     alert("Geolocation is not supported by this browser.");
   }
 }
 
 // Fetch weather by coordinates
-function getCurrentWeatherByCoordinates(lat,lon){
-  const weatherAPI=`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${api_key}&units=metric`;
-  fetch(weatherAPI).then((response)=>response.json()).then((data)=>{
-    updateWeatherDetailsUI(data);
+function getCurrentWeatherByCoordinates(lat, lon) {
+  const weatherAPI = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${api_key}&units=metric`;
+  fetch(weatherAPI)
+    .then((response) => response.json())
+    .then((data) => {
+      updateWeatherDetailsUI(data);
+    })
+    .catch((error) => {
+      console.log("Error fetching current location weather:", error);
+    });
 
-  }).catch((error)=>{
-    console.log("Error fetching current location weather:",error);
-  });
-
-  const forecastAPI=`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${api_key}&units=metric`;
-  fetch(forecastAPI).then((response)=>response.json()).then((data)=>{
-    updateForecastUI(data);
-  }).catch((error)=>{
-    console.log("Error fetching current location forecast:",error);
-  })
+  const forecastAPI = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${api_key}&units=metric`;
+  fetch(forecastAPI)
+    .then((response) => response.json())
+    .then((data) => {
+      updateForecastUI(data);
+    })
+    .catch((error) => {
+      console.log("Error fetching current location forecast:", error);
+    });
 }
-
