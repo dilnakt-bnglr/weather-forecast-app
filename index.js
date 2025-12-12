@@ -1,5 +1,6 @@
 let searchBtn = document.querySelector(".search-button");
 let searchBtnMobile = document.querySelector(".search-button-mobile");
+let cityInput=document.querySelector(".location-input");
 searchBtnMobile.addEventListener("click", handleMobileSearch);
 searchBtn.addEventListener("click", handleSearch);
 const currentLocation = document.querySelector(".current-location-container");
@@ -13,10 +14,20 @@ document.addEventListener("DOMContentLoaded", () => {
   getDropDownOptionsFromLocalStorage();
 });
 
+// 
+cityInput.addEventListener("keypress",(e)=>{
+  if(e.key==="Enter"){
+    const city=cityInput.value.trim();
+    const customOptions = document.querySelector(".custom-options");
+    if(city){
+      getWeatherByCityName(city);
+      customOptions.style.display = 'none';
+    }
+  }
+})
 // Adding city to local storage
-function addCityToLocalStorage(city,country) {
- let cityList = JSON.parse(localStorage.getItem("cityList")) || [];
-  city = `${city}, ${country}`;  
+function addCityToLocalStorage(city) {
+ let cityList = JSON.parse(localStorage.getItem("cityList")) || []; 
  if(!cityList.includes(city)){
   cityList.unshift(city);
  }
@@ -108,6 +119,10 @@ function getWeatherByCityName(city) {
   fetch(cityNameAPI)
     .then((response) => response.json())
     .then((data) => {
+      const errorTag = document.querySelector(".error");
+      if(errorTag) {
+        errorTag.remove();
+      }
       if (data.cod !== 200) {
         const searchDiv = document.querySelector(".search");
         const errorMsg = document.createElement("p");
@@ -120,7 +135,7 @@ function getWeatherByCityName(city) {
         return;
       }
       
-      addCityToLocalStorage(city,data.sys.country);
+      addCityToLocalStorage(city);
       updateWeatherDetailsUI(data);
       const temp=data.main.temp;
       alertForExtremeWeather(temp);
@@ -151,6 +166,9 @@ function updateWeatherDetailsUI(weatherData) {
   // Update weather icon
   const weatherIcon = weatherData.weather[0].icon;
   currentWeatherIconElement.src = `https://openweathermap.org/img/wn/${weatherIcon}.png`;
+
+  const weatherDescription=document.querySelector(".weather-desc");
+  weatherDescription.textContent=`${weatherData.weather[0].description}`;
   // Update location
   const location = document.querySelector(".location");
   location.textContent = `${weatherData.name},${weatherData.sys.country}`;
@@ -247,6 +265,10 @@ function getCurrentWeatherByCoordinates(lat, lon) {
   fetch(weatherAPI)
     .then((response) => response.json())
     .then((data) => {
+      const errorTag = document.querySelector(".error");
+      if(errorTag) {
+        errorTag.remove();
+      }
       updateWeatherDetailsUI(data);
       const temp=data.main.temp;
       alertForExtremeWeather(temp);
@@ -269,7 +291,6 @@ function getCurrentWeatherByCoordinates(lat, lon) {
 
 
 function alertForExtremeWeather(temp){
-  debugger;
   const weatherAlert=document.querySelector(".weather-alert");
   console.log(weatherAlert);
   if(!weatherAlert) return;
