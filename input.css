@@ -13,6 +13,7 @@ body{
 }
 
 .current-day{
+  position: relative;
   box-shadow: inset 0px 0px 20px 20px rgb(13 6 114 / 25%);
 }
 
@@ -38,11 +39,25 @@ body{
   z-index: 10;
 }
 
-/* .custom-option {
-  padding: 10px;
-  cursor: pointer;
-  display: block;
-} */
-/* .location-input:focus + .custom-options{
-  display: block;
-} */
+.weather-alert{
+  position:absolute;
+  border:1px solid red;
+  height:1.5rem;
+  overflow:hidden;
+  top:25%;
+  display:none;
+
+}
+.temp-alert{
+  /* position: absolute; */
+  font-size: 1rem;
+  font-weight: bold;
+  color: red;
+  animation: blinker 1s linear infinite;
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}

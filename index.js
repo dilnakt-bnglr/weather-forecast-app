@@ -119,9 +119,11 @@ function getWeatherByCityName(city) {
         }
         return;
       }
+      
       addCityToLocalStorage(city,data.sys.country);
-      getDropDownOptions();
       updateWeatherDetailsUI(data);
+      const temp=data.main.temp;
+      alertForExtremeWeather(temp);
     })
     .catch((error) => {
       console.log("Error fetching coordinates:", error);
@@ -246,6 +248,9 @@ function getCurrentWeatherByCoordinates(lat, lon) {
     .then((response) => response.json())
     .then((data) => {
       updateWeatherDetailsUI(data);
+      const temp=data.main.temp;
+      alertForExtremeWeather(temp);
+
     })
     .catch((error) => {
       console.log("Error fetching current location weather:", error);
@@ -260,4 +265,33 @@ function getCurrentWeatherByCoordinates(lat, lon) {
     .catch((error) => {
       console.log("Error fetching current location forecast:", error);
     });
+}
+
+
+function alertForExtremeWeather(temp){
+  debugger;
+  const weatherAlert=document.querySelector(".weather-alert");
+  console.log(weatherAlert);
+  if(!weatherAlert) return;
+  weatherAlert.innerHTML="";
+  const tempAlert=document.createElement("p");
+  tempAlert.classList.add("temp-alert");
+  tempAlert.innerHTML="";
+  // message=""
+  if(temp>=40){
+    tempAlert.textContent="Extreme heat warning! Stay indoors and hydrated.";
+  } else if (temp>=35) {
+    tempAlert.textContent="Very hot weather! Take precautions.";
+  }else if(temp<=0){
+    tempAlert.textContent="Freezing Cold!";
+  }else if(temp<=5){
+    tempAlert.textContent="Very Cold! Stay warm";
+  }
+weatherAlert.appendChild(tempAlert);
+weatherAlert.style.display="block";
+
+  setTimeout(()=>{
+    weatherAlert.style.display="none";
+  },10000);
+  
 }
