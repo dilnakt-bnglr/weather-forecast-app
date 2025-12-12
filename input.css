@@ -1,54 +1,64 @@
 @import "tailwindcss";
 
-
-body{
-     background: linear-gradient(to right, aquamarine, turquoise, navy) ;
-     padding:1rem
+body {
+  background: linear-gradient(to right, aquamarine, #429e48, #3a373e4d);
+  padding: 1rem;
 }
 
-
-.location-icon{
-    color:chartreuse;
-    font-size: 20px;
+.logo {
+  color: #962790;
 }
 
-.current-day{
+.location-icon {
+  color: #962790;
+  font-size: 20px;
+}
+.search-button {
+  background-color: #c9a515d1;
+}
+
+.weather-desc {
+  color: lime;
+  font-style: italic;
+}
+
+.current-day {
   position: relative;
   box-shadow: inset 0px 0px 20px 20px rgb(13 6 114 / 25%);
 }
 
-.forecast-card{
+.forecast-card {
   border-color: ghostwhite;
   box-shadow: inset 0px 0px 20px 20px rgb(13 6 114 / 25%);
 }
 
-/* .forecast-card:hover{
-  transform: scale(1.05);
-  transition: transform 0.3s ease-in-out;
-}  */
-
-.custom-options{
- display: none;
+.custom-options {
+  display: none;
   position: absolute;
   top: 100%;
   left: 0;
   right: 0;
   background-color: #fff;
   border: 1px solid #ccc;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-  z-index: 10;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, .08) ;
+  z-index: 1;
+  border-radius: 7px;
+  width: 75%;
+  margin-left: 6%;
+  p {
+    border-bottom: 1px dashed;
+  }
 }
 
-.weather-alert{
-  position:absolute;
-  border:1px solid red;
-  height:1.5rem;
-  overflow:hidden;
-  top:25%;
-  display:none;
-
+.weather-alert {
+  position: absolute;
+  border: 1px solid red;
+  height: 1.5rem;
+  overflow: hidden;
+  top: 25%;
+  display: none;
 }
-.temp-alert{
+.temp-alert {
   /* position: absolute; */
   font-size: 1rem;
   font-weight: bold;
@@ -60,4 +70,9 @@ body{
   50% {
     opacity: 0;
   }
+}
+
+
+.forecast-card:hover{
+  transform: scale(1.05);
 }

@@ -13,7 +13,7 @@
   </head>
   <body>
     <!-- Header Section -->
-    <section class="header grid grid-cols-[1fr_2fr_1fr] text-blue-900 mb-10">
+    <section class="header grid grid-cols-[1fr_2fr_1fr] mb-10">
       <div class="logo flex cursor-pointer">
         <p class="mt-2 mr-2"><i class="fa-solid fa-cloud text-3xl"></i></p>
         <h2 class="logo font-bold text-3xl hidden lg:block">WeatherNow</h2>
@@ -29,7 +29,7 @@
           id="cityInput"
         />
         <button
-          class="search-button border-1 border-blue-900 text-white p-2 rounded-full ml-2 bg-blue-900 cursor-pointer"
+          class="search-button text-white p-2 rounded-full ml-2 cursor-pointer font-bold"
           id="getWeatherBtn"
         >
           Search
@@ -39,7 +39,9 @@
       <div
         class="current-location-container text-end mt-2 cursor-pointer absolute right-5"
       >
-        <button class="text-white cursor-pointer sm:hidden lg:contents">
+        <button
+          class="text-white cursor-pointer sm:hidden lg:contents font-bold"
+        >
           Current location
         </button>
         <i class="fa-solid fa-location-pin location-icon"></i>
@@ -67,17 +69,16 @@
     <section class="current-weather">
       <div class="current-day lg:w-[45%] m-auto rounded-2xl p-5 text-white">
         <div class="text-center p-5">
-          <h3 class="current-date text-2xl font-semibold">TODAY</h3>
+          <h3 class="current-date text-2xl font-semibold"></h3>
         </div>
         <div class="weather-values flex justify-evenly items-center">
-          <div class="weather-alert">
-            <!-- <p class="temp-alert">
-              Extreme heat warning! Stay indoors and hydrated. 🥵
-            </p> -->
+          <div class="weather-alert"></div>
+          <h2 class="current-temperature text-3xl sm:text-5xl font-bold"></h2>
+          <div>
+            <img class="weather-icon" alt="logo" width="100%" />
+            <p class="weather-desc">cloudy</p>
           </div>
-          <h2 class="current-temperature text-5xl font-bold">15°C</h2>
-          <img class="weather-icon" alt="logo" width="20%" />
-          <p class="location text-2xl font-bold">Location</p>
+          <p class="location text-2xl font-bold"></p>
         </div>
         <div
           class="weather-details text-center text-xl font-semibold p-5"
