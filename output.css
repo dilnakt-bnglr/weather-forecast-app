@@ -372,6 +372,7 @@ body {
   font-size: 20px;
 }
 .current-day {
+  position: relative;
   box-shadow: inset 0px 0px 20px 20px rgb(13 6 114 / 25%);
 }
 .forecast-card {
@@ -388,6 +389,25 @@ body {
   border: 1px solid #ccc;
   box-shadow: 0 4px 8px rgba(0,0,0,0.2);
   z-index: 10;
+}
+.weather-alert {
+  position: absolute;
+  border: 1px solid red;
+  height: 1.5rem;
+  overflow: hidden;
+  top: 25%;
+  display: none;
+}
+.temp-alert {
+  font-size: 1rem;
+  font-weight: bold;
+  color: red;
+  animation: blinker 1s linear infinite;
+}
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
 }
 @property --tw-border-style {
   syntax: "*";
