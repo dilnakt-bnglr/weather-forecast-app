@@ -1,3 +1,5 @@
+// GitHub Link - https:github.com/dilnakt-bnglr/weather-forecast-app
+
 let searchBtn = document.querySelector(".search-button");
 let searchBtnMobile = document.querySelector(".search-button-mobile");
 let cityInput=document.querySelector(".location-input");
