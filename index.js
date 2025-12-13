@@ -399,7 +399,7 @@ function alertForExtremeWeather(temp) {
     weatherAlert.style.display = "block";
   }
 
-  // setTimeout(() => {
-  //   weatherAlert.style.display = "none";
-  // }, 10000);
+  setTimeout(() => {
+    weatherAlert.style.display = "none";
+  }, 10000);
 }
