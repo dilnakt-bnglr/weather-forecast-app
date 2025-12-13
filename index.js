@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
   getDropDownOptionsFromLocalStorage();
 });
 
-// 
+// Keypress Functionality
 cityInput.addEventListener("keypress",(e)=>{
   if(e.key==="Enter"){
     const city=cityInput.value.trim();
@@ -111,6 +111,38 @@ function handleMobileSearch() {
     getWeatherByCityName(cityName);
     cityInput.value = "";
   }
+}
+
+// Toggle button Functionality
+const unitToggle = document.getElementById('unitToggle');
+unitToggle.addEventListener('change', function() {
+  
+  const tempValue=document.querySelector(".current-temperature").textContent;
+  const currentTemp=tempValue.split(' ')[0];
+  const labelFahrenheit=document.querySelector(".fahrenheit");
+  const labelCelsius=document.querySelector(".celsius");
+  if (unitToggle.checked) {
+    const fahrenheitValue=celsiusToFahrenheit(currentTemp);
+    document.querySelector(".current-temperature").textContent=`${fahrenheitValue} °F`;
+    labelFahrenheit.style.color="purple";
+    labelCelsius.style.color="white";
+
+  } else {
+    const celsiusValue=fahrenheitToCelsius(currentTemp);
+    document.querySelector(".current-temperature").textContent=`${celsiusValue} °C`;
+    labelCelsius.style.color="darkblue";
+    labelFahrenheit.style.color="white";
+  }
+});
+
+// Method to convert temperature from Celsius to Fahrenheit
+function celsiusToFahrenheit(currentTemp) {
+  return Math.round((currentTemp * 9/5) + 32);
+}
+
+// Method to convert temperature from Fahrenheit to Celsius
+function fahrenheitToCelsius(currentTemp) {
+  return Math.round((currentTemp - 32) * 5/9);
 }
 
 // Fetch current weather details by city name
@@ -289,10 +321,9 @@ function getCurrentWeatherByCoordinates(lat, lon) {
     });
 }
 
-
+// Add Alert Functionality for Extreme Weather
 function alertForExtremeWeather(temp){
   const weatherAlert=document.querySelector(".weather-alert");
-  console.log(weatherAlert);
   if(!weatherAlert) return;
   weatherAlert.innerHTML="";
   const tempAlert=document.createElement("p");
