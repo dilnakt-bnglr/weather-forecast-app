@@ -59,7 +59,6 @@ body {
   display: none;
 }
 .temp-alert {
-  /* position: absolute; */
   font-size: 1rem;
   font-weight: bold;
   color: red;
