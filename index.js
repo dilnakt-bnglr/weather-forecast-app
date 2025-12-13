@@ -100,9 +100,9 @@ function validateCityName(cityName) {
     errorMsg.classList.add("error");
     errorMsg.innerHTML = "Please enter a city name";
     const error = document.querySelector(".error");
+    if (mobileSearch) mobileSearch.appendChild(errorMsg);
     if (!error) {
       searchDiv.appendChild(errorMsg);
-      mobileSearch.appendChild(errorMsg);
     }
     isValid = false;
   }

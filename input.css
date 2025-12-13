@@ -141,3 +141,7 @@ input:checked + .slider:before {
   transition: all 0.3s;
   cursor: pointer;
 }
+
+.error {
+  text-align: center;
+}
