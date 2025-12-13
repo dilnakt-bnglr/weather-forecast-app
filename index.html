@@ -76,9 +76,19 @@
           <h2 class="current-temperature text-3xl sm:text-5xl font-bold"></h2>
           <div>
             <img class="weather-icon" alt="logo" width="100%" />
-            <p class="weather-desc">cloudy</p>
+            <p class="weather-desc"></p>
           </div>
           <p class="location text-2xl font-bold"></p>
+        </div>
+        <div class="toggle-container">
+          <div class="labels ml-1">
+            <span class="label celsius text-blue-900">°C</span>
+            <div class="toggle-switch">
+              <input type="checkbox" id="unitToggle" />
+              <label class="slider" for="unitToggle"></label>
+            </div>
+            <span class="label fahrenheit">°F</span>
+          </div>
         </div>
         <div
           class="weather-details text-center text-xl font-semibold p-5"

@@ -206,6 +206,9 @@
   .mb-10 {
     margin-bottom: calc(var(--spacing) * 10);
   }
+  .ml-1 {
+    margin-left: calc(var(--spacing) * 1);
+  }
   .ml-2 {
     margin-left: calc(var(--spacing) * 2);
   }
@@ -313,6 +316,9 @@
   }
   .text-black {
     color: var(--color-black);
+  }
+  .text-blue-900 {
+    color: var(--color-blue-900);
   }
   .text-white {
     color: var(--color-white);
@@ -426,6 +432,62 @@ body {
 }
 .forecast-card:hover {
   transform: scale(1.05);
+}
+.toggle-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: Arial, sans-serif;
+}
+.toggle-switch {
+  position: relative;
+  width: 60px;
+  height: 34px;
+}
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 34px;
+}
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+input:checked + .slider {
+  background-color: #935f85;
+}
+input:checked + .slider:before {
+  transform: translateX(26px);
+}
+.labels {
+  display: flex;
+  gap: 0.5px;
+  font-weight: bold;
+  margin-left: 20px;
+}
+.label {
+  padding: 8px 16px;
+  border-radius: 20px;
+  transition: all 0.3s;
+  cursor: pointer;
 }
 @property --tw-border-style {
   syntax: "*";
