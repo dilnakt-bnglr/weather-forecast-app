@@ -50,7 +50,7 @@
       </div>
     </section>
     <!-- Mobile Search Section -->
-    <section class="sm:hidden mb-10">
+    <section class="sm:hidden mb-10 mobile-search">
       <div class="flex justify-center items-center">
         <input
           class="location-input-mobile pl-4 outline-none border-2 border-white rounded-full w-[75%]"
@@ -59,7 +59,7 @@
           id="cityInput"
         />
         <button
-          class="search-button-mobile border-1 border-blue-900 text-white p-2 rounded-full ml-2 bg-blue-900 cursor-pointer"
+          class="search-button-mobile border-1 border-blue-900 text-white p-2 rounded-full ml-2 bg-blue-900 cursor-pointer font-bold"
           id="getWeatherBtn"
         >
           Search
@@ -73,8 +73,10 @@
         <div class="text-center p-5">
           <h3 class="current-date text-2xl font-semibold"></h3>
         </div>
-        <div class="weather-values flex justify-evenly items-center">
-          <div class="weather-alert"></div>
+        <div
+          class="flex-col sm:flex-row weather-values flex justify-evenly items-center"
+        >
+          <div class="weather-alert mt-4 sm:m-0"></div>
           <h2 class="current-temperature text-3xl sm:text-5xl font-bold"></h2>
           <div>
             <img class="weather-icon" alt="logo" width="100%" />
@@ -82,7 +84,9 @@
           </div>
           <p class="location text-2xl font-bold"></p>
         </div>
-        <div class="toggle-container">
+        <div
+          class="toggle-container ml-[15%] mt-[10%] md:ml-[9%] md:mt-0 lg:ml-[5%]"
+        >
           <div class="labels ml-1">
             <span class="label celsius text-blue-900">°C</span>
             <div class="toggle-switch">

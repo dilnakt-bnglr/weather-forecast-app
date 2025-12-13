@@ -13,7 +13,8 @@ body {
   color: #962790;
   font-size: 20px;
 }
-.search-button {
+.search-button, .search-button-mobile {
+  border: none;
   background-color: #c9a515d1;
 }
 

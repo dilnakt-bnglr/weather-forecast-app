@@ -2,7 +2,8 @@
 
 let searchBtn = document.querySelector(".search-button");
 let searchBtnMobile = document.querySelector(".search-button-mobile");
-let cityInput=document.querySelector(".location-input");
+let cityInput = document.querySelector(".location-input");
+let cityInputMobile = document.querySelector(".location-input-mobile");
 searchBtnMobile.addEventListener("click", handleMobileSearch);
 searchBtn.addEventListener("click", handleSearch);
 const currentLocation = document.querySelector(".current-location-container");
@@ -17,22 +18,35 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // Keypress Functionality
-cityInput.addEventListener("keypress",(e)=>{
-  if(e.key==="Enter"){
-    const city=cityInput.value.trim();
+cityInput.addEventListener("keypress", (e) => {
+  if (e.key === "Enter") {
+    const city = cityInput.value.trim();
     const customOptions = document.querySelector(".custom-options");
-    if(city){
+    const isValid = validateCityName(city);
+    if (isValid) {
       getWeatherByCityName(city);
-      customOptions.style.display = 'none';
+      customOptions.style.display = "none";
     }
   }
-})
+});
+
+// Keypress for Mobile Search
+cityInputMobile.addEventListener("keypress", (e) => {
+  if (e.key === "Enter") {
+    const city = cityInputMobile.value.trim();
+    const isValid = validateCityName(city);
+    if (isValid) {
+      getWeatherByCityName(city);
+    }
+  }
+});
+
 // Adding city to local storage
 function addCityToLocalStorage(city) {
- let cityList = JSON.parse(localStorage.getItem("cityList")) || []; 
- if(!cityList.includes(city)){
-  cityList.unshift(city);
- }
+  let cityList = JSON.parse(localStorage.getItem("cityList")) || [];
+  if (!cityList.includes(city)) {
+    cityList.unshift(city);
+  }
   cityList = cityList.slice(0, 5);
   localStorage.setItem("cityList", JSON.stringify(cityList));
 }
@@ -81,12 +95,14 @@ function validateCityName(cityName) {
   let isValid = true;
   if (cityName === "") {
     const searchDiv = document.querySelector(".search");
+    const mobileSearch = document.querySelector(".mobile-search");
     const errorMsg = document.createElement("p");
     errorMsg.classList.add("error");
     errorMsg.innerHTML = "Please enter a city name";
     const error = document.querySelector(".error");
     if (!error) {
       searchDiv.appendChild(errorMsg);
+      mobileSearch.appendChild(errorMsg);
     }
     isValid = false;
   }
@@ -116,35 +132,37 @@ function handleMobileSearch() {
 }
 
 // Toggle button Functionality
-const unitToggle = document.getElementById('unitToggle');
-unitToggle.addEventListener('change', function() {
-  
-  const tempValue=document.querySelector(".current-temperature").textContent;
-  const currentTemp=tempValue.split(' ')[0];
-  const labelFahrenheit=document.querySelector(".fahrenheit");
-  const labelCelsius=document.querySelector(".celsius");
+const unitToggle = document.getElementById("unitToggle");
+unitToggle.addEventListener("change", function () {
+  const tempValue = document.querySelector(".current-temperature").textContent;
+  const currentTemp = tempValue.split(" ")[0];
+  const labelFahrenheit = document.querySelector(".fahrenheit");
+  const labelCelsius = document.querySelector(".celsius");
   if (unitToggle.checked) {
-    const fahrenheitValue=celsiusToFahrenheit(currentTemp);
-    document.querySelector(".current-temperature").textContent=`${fahrenheitValue} °F`;
-    labelFahrenheit.style.color="purple";
-    labelCelsius.style.color="white";
-
+    const fahrenheitValue = celsiusToFahrenheit(currentTemp);
+    document.querySelector(
+      ".current-temperature"
+    ).textContent = `${fahrenheitValue} °F`;
+    labelFahrenheit.style.color = "purple";
+    labelCelsius.style.color = "white";
   } else {
-    const celsiusValue=fahrenheitToCelsius(currentTemp);
-    document.querySelector(".current-temperature").textContent=`${celsiusValue} °C`;
-    labelCelsius.style.color="darkblue";
-    labelFahrenheit.style.color="white";
+    const celsiusValue = fahrenheitToCelsius(currentTemp);
+    document.querySelector(
+      ".current-temperature"
+    ).textContent = `${celsiusValue} °C`;
+    labelCelsius.style.color = "darkblue";
+    labelFahrenheit.style.color = "white";
   }
 });
 
 // Method to convert temperature from Celsius to Fahrenheit
 function celsiusToFahrenheit(currentTemp) {
-  return Math.round((currentTemp * 9/5) + 32);
+  return Math.round((currentTemp * 9) / 5 + 32);
 }
 
 // Method to convert temperature from Fahrenheit to Celsius
 function fahrenheitToCelsius(currentTemp) {
-  return Math.round((currentTemp - 32) * 5/9);
+  return Math.round(((currentTemp - 32) * 5) / 9);
 }
 
 // Fetch current weather details by city name
@@ -154,7 +172,7 @@ function getWeatherByCityName(city) {
     .then((response) => response.json())
     .then((data) => {
       const errorTag = document.querySelector(".error");
-      if(errorTag) {
+      if (errorTag) {
         errorTag.remove();
       }
       if (data.cod !== 200) {
@@ -168,10 +186,10 @@ function getWeatherByCityName(city) {
         }
         return;
       }
-      
+
       addCityToLocalStorage(city);
       updateWeatherDetailsUI(data);
-      const temp=data.main.temp;
+      const temp = data.main.temp;
       alertForExtremeWeather(temp);
     })
     .catch((error) => {
@@ -182,6 +200,21 @@ function getWeatherByCityName(city) {
   fetch(forecastAPI)
     .then((response) => response.json())
     .then((data) => {
+      // error handling
+      if (data.cod != 200) {
+        const foreCastContainer = document.querySelector(
+          ".forecast-card-container"
+        );
+        foreCastContainer.innerHTML = "";
+        const errorMsg = document.createElement("p");
+        errorMsg.classList.add("error");
+        errorMsg.innerHTML = data.message;
+        const error = document.querySelector(".error");
+        if (!error) {
+          foreCastContainer.appendChild(errorMsg);
+        }
+        return;
+      }
       updateForecastUI(data);
     });
 }
@@ -201,8 +234,8 @@ function updateWeatherDetailsUI(weatherData) {
   const weatherIcon = weatherData.weather[0].icon;
   currentWeatherIconElement.src = `https://openweathermap.org/img/wn/${weatherIcon}.png`;
 
-  const weatherDescription=document.querySelector(".weather-desc");
-  weatherDescription.textContent=`${weatherData.weather[0].description}`;
+  const weatherDescription = document.querySelector(".weather-desc");
+  weatherDescription.textContent = `${weatherData.weather[0].description}`;
   // Update location
   const location = document.querySelector(".location");
   location.textContent = `${weatherData.name},${weatherData.sys.country}`;
@@ -300,13 +333,14 @@ function getCurrentWeatherByCoordinates(lat, lon) {
     .then((response) => response.json())
     .then((data) => {
       const errorTag = document.querySelector(".error");
-      if(errorTag) {
+      if (errorTag) {
         errorTag.remove();
       }
+      cityInput.value = data.name;
+      cityInputMobile.value = data.name;
       updateWeatherDetailsUI(data);
-      const temp=data.main.temp;
+      const temp = data.main.temp;
       alertForExtremeWeather(temp);
-
     })
     .catch((error) => {
       console.log("Error fetching current location weather:", error);
@@ -316,6 +350,21 @@ function getCurrentWeatherByCoordinates(lat, lon) {
   fetch(forecastAPI)
     .then((response) => response.json())
     .then((data) => {
+      // error handling
+      if (data.cod != 200) {
+        const foreCastContainer = document.querySelector(
+          ".forecast-card-container"
+        );
+        foreCastContainer.innerHTML = "";
+        const errorMsg = document.createElement("p");
+        errorMsg.classList.add("error");
+        errorMsg.innerHTML = data.message;
+        const error = document.querySelector(".error");
+        if (!error) {
+          foreCastContainer.appendChild(errorMsg);
+        }
+        return;
+      }
       updateForecastUI(data);
     })
     .catch((error) => {
@@ -324,28 +373,33 @@ function getCurrentWeatherByCoordinates(lat, lon) {
 }
 
 // Add Alert Functionality for Extreme Weather
-function alertForExtremeWeather(temp){
-  const weatherAlert=document.querySelector(".weather-alert");
-  if(!weatherAlert) return;
-  weatherAlert.innerHTML="";
-  const tempAlert=document.createElement("p");
+function alertForExtremeWeather(temp) {
+  const weatherAlert = document.querySelector(".weather-alert");
+  if (!weatherAlert) return;
+  weatherAlert.innerHTML = "";
+  const tempAlert = document.createElement("p");
   tempAlert.classList.add("temp-alert");
-  tempAlert.innerHTML="";
+  tempAlert.innerHTML = "";
   // message=""
-  if(temp>=40){
-    tempAlert.textContent="Extreme heat warning! Stay indoors and hydrated.";
-  } else if (temp>=35) {
-    tempAlert.textContent="Very hot weather! Take precautions.";
-  }else if(temp<=0){
-    tempAlert.textContent="Freezing Cold!";
-  }else if(temp<=5){
-    tempAlert.textContent="Very Cold! Stay warm";
+  if (temp >= 40) {
+    tempAlert.textContent = "Extreme heat warning! Stay indoors and hydrated.";
+    weatherAlert.appendChild(tempAlert);
+    weatherAlert.style.display = "block";
+  } else if (temp >= 35) {
+    tempAlert.textContent = "Very hot weather! Take precautions.";
+    weatherAlert.appendChild(tempAlert);
+    weatherAlert.style.display = "block";
+  } else if (temp <= 0) {
+    tempAlert.textContent = "Freezing Cold!";
+    weatherAlert.appendChild(tempAlert);
+    weatherAlert.style.display = "block";
+  } else if (temp <= 5) {
+    tempAlert.textContent = "Very Cold! Stay warm";
+    weatherAlert.appendChild(tempAlert);
+    weatherAlert.style.display = "block";
   }
-weatherAlert.appendChild(tempAlert);
-weatherAlert.style.display="block";
 
-  setTimeout(()=>{
-    weatherAlert.style.display="none";
-  },10000);
-  
+  // setTimeout(() => {
+  //   weatherAlert.style.display = "none";
+  // }, 10000);
 }
